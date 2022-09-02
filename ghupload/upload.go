@@ -16,6 +16,7 @@ import (
 type GH struct {
 	Token  string
 	Client *github.Client
+	dst    blob
 }
 
 type blob struct {
@@ -39,12 +40,98 @@ func parsePath(path string) (blob, error) {
 	}, nil
 }
 
+func (g *GH) checkIfAlreadyUploaded(ctx context.Context, filename string) (*string, error) {
+	sha, err := RunGit(".", "hash-object", filename)
+	if err != nil {
+		return nil, err
+	}
+	u := fmt.Sprintf("repos/%v/%v/git/blobs/%v", g.dst.owner, g.dst.repo, sha)
+	req, err := g.Client.NewRequest("HEAD", u, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	blob := new(github.Blob)
+	resp, _ := g.Client.Do(ctx, req, blob)
+	if resp.StatusCode == 200 {
+		return github.String(sha), nil
+	}
+	return nil, nil
+}
+
 func (g *GH) CreateClient(ctx context.Context) {
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: g.Token},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 	g.Client = github.NewClient(tc)
+}
+
+func (g *GH) getFileMode(src string) (string, error) {
+	fi, err := os.Stat(src)
+	if err != nil {
+		return "", err
+	}
+	// if it's a normal file then perm == 100644
+	perm := "100644"
+	if fi.IsDir() {
+		perm = "100644"
+	} else if fi.Mode()&os.ModeSymlink != 0 {
+		return "", fmt.Errorf("symlink path: %s is not supported (cause i am lazy)", src)
+	}
+	return perm, nil
+}
+
+func (g *GH) walkTheWalk(ctx context.Context, dir string) ([]*github.TreeEntry, error) {
+	// walkg over directory
+	entries := []*github.TreeEntry{}
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, errr error) error {
+		if errr != nil {
+			return errr
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		// get git hash for file
+		sha, err := g.checkIfAlreadyUploaded(ctx, path)
+		if err != nil {
+			return err
+		}
+
+		perm, err := g.getFileMode(path)
+		if err != nil {
+			return err
+		}
+		if sha == nil {
+			file, err := os.Open(path)
+			if err != nil {
+				return err
+			}
+			content, err := io.ReadAll(file)
+			if err != nil {
+				return err
+			}
+			// create a blob out of it
+			blob, _, err := g.Client.Git.CreateBlob(ctx, g.dst.owner, g.dst.repo,
+				&github.Blob{
+					Content: github.String(string(content)),
+				})
+			if err != nil {
+				return err
+			}
+			sha = blob.SHA
+		}
+		entries = append(entries, &github.TreeEntry{
+			Path: github.String(filepath.Join(g.dst.path, path)),
+			Mode: github.String(perm),
+			Type: github.String("blob"),
+			SHA:  sha,
+		})
+		return nil
+	})
+	return entries, err
 }
 
 func (g *GH) Upload(ctx context.Context, args []string, author, email, commitMessage string) error {
@@ -64,6 +151,7 @@ func (g *GH) Upload(ctx context.Context, args []string, author, email, commitMes
 		return err
 	}
 	isDirUpload := strings.HasSuffix(dstBlob.path, "/")
+	g.dst = dstBlob
 
 	// srcs are everything but the last argument
 	srcs := args[:len(args)-1]
@@ -72,35 +160,14 @@ func (g *GH) Upload(ctx context.Context, args []string, author, email, commitMes
 	if !isDirUpload && len(srcs) > 1 {
 		return fmt.Errorf("dst path must end with a / if you want to upload multiple files")
 	}
+
 	entries := []*github.TreeEntry{}
 	for _, src := range srcs {
-		fi, err := os.Stat(src)
+		newentries, err := g.walkTheWalk(ctx, src)
 		if err != nil {
 			return err
 		}
-		// if it's a normal file then perm == 100644
-		perm := "100644"
-		if fi.IsDir() {
-			perm = "100644"
-		} else if fi.Mode()&os.ModeSymlink != 0 {
-			return fmt.Errorf("symlink is not supported (cause i am lazy)")
-		}
-
-		file, err := os.Open(src)
-		if err != nil {
-			return err
-		}
-		content, err := io.ReadAll(file)
-		if err != nil {
-			return err
-		}
-		entries = append(entries, &github.TreeEntry{
-			Path:    github.String(filepath.Join(dstBlob.path, fi.Name())),
-			Mode:    github.String(perm),
-			Type:    github.String("commit"),
-			Content: github.String(string(content)),
-		})
-
+		entries = append(entries, newentries...)
 	}
 
 	branch := dstBlob.branch

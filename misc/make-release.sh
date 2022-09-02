@@ -41,6 +41,6 @@ bumpversion() {
 }
 [[ -z ${VERSION} ]] && bumpversion
 
-git tag -s ${VERSION} -m "Releasing version ${VERSION}"
+git tag
 git push --tags origin ${VERSION}
 git push origin main --no-verify

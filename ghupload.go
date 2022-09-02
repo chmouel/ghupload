@@ -50,7 +50,7 @@ func app() error {
 				Name:  "upload",
 				Flags: commonFlag,
 				Action: func(c *cli.Context) error {
-					if c.Args().Len() != 2 {
+					if c.Args().Len() < 2 {
 						return fmt.Errorf("invalid number of arguments we need at least a src and a dst")
 					}
 					token := c.String("token")

@@ -7,13 +7,12 @@ import (
 	"strings"
 )
 
-func RunGit(dir string, args ...string) (string, error) {
-	gitPath, err := exec.LookPath("git")
+func RunCMD(cmd, dir string, args ...string) (string, error) {
+	cmdPath, err := exec.LookPath(cmd)
 	if err != nil {
-		// nolint: nilerr
-		return "", nil
+		return "", err
 	}
-	c := exec.Command(gitPath, args...)
+	c := exec.Command(cmdPath, args...)
 	var output bytes.Buffer
 	c.Stderr = &output
 	c.Stdout = &output

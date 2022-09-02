@@ -2,13 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Upload itself",
+            "name": "Upload",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}",
             "env": {
-                "GITHUB_TOKEN": "${input:githubToken}"
+                "GITHUB_TOKEN": "pass::github/chmouel-token"
             },
             "args": [
                 "upload",

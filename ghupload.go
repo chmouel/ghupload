@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/chmouel/ghupload/ghupload"
 
@@ -57,14 +58,22 @@ func app() error {
 					if token == "" {
 						return cli.Exit("github token need to be set", 1)
 					}
+					if strings.HasPrefix(token, "pass::") {
+						passkey := strings.TrimPrefix(token, "pass::")
+						var err error
+						if token, err = ghupload.RunCMD("pass", ".", "show", passkey); err != nil {
+							return err
+						}
+					}
+
 					author := c.String("author")
 					if author == "" {
-						author, _ = ghupload.RunGit(".", "config", "--global", "user.name")
+						author, _ = ghupload.RunCMD("git", ".", "config", "--global", "user.name")
 					}
 
 					email := c.String("email")
 					if email == "" {
-						email, _ = ghupload.RunGit(".", "config", "--global", "user.email")
+						email, _ = ghupload.RunCMD("git", ".", "config", "--global", "user.email")
 					}
 
 					g := ghupload.NewGHClient(token)

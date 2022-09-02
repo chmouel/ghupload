@@ -41,7 +41,7 @@ func parsePath(path string) (blob, error) {
 }
 
 func (g *GH) checkIfAlreadyUploaded(ctx context.Context, filename string) (*string, error) {
-	sha, err := RunGit(".", "hash-object", filename)
+	sha, err := RunCMD("git", ".", "hash-object", filename)
 	if err != nil {
 		return nil, err
 	}

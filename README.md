@@ -2,7 +2,7 @@
 
 ## What is it?
 
-ghupload is a tool to upload files to a Github repository. It is a command line tool that can be used in scripts or in a CI environment.
+ghupload is a tool to upload files to a Github repository. It is a command line tool that can be used in scripts or in a CI environment. It allows you to upload directly via the Github API without having to `git clone` && `git commmit` && `git push` for a simple file upload...
 
 ## How to use it?
 

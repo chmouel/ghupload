@@ -14,8 +14,14 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+//go:embed misc/completions/zsh_completion.zsh
+var zshCompletion []byte
+
 //go:embed misc/version
 var Version []byte
+
+//go:embed misc/completions/bash_completion.bash
+var bashCompletion []byte
 
 func app() error {
 	ctx := context.Background()
@@ -51,7 +57,30 @@ func app() error {
 	app := &cli.App{
 		EnableBashCompletion: true,
 		Version:              strings.TrimSpace(string(Version)),
+		UsageText:            "ghupload [command options] FILE DIR... repo/owner@branch:destination",
 		Commands: []*cli.Command{
+			{
+				Name:  "completion",
+				Usage: "generate shell completion",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "zsh",
+						Usage: "generate zsh completion",
+						Action: func(c *cli.Context) error {
+							os.Stdout.WriteString(string(zshCompletion))
+							return nil
+						},
+					},
+					{
+						Name:  "bash",
+						Usage: "generate bash completion",
+						Action: func(c *cli.Context) error {
+							os.Stdout.WriteString(string(bashCompletion))
+							return nil
+						},
+					},
+				},
+			},
 			{
 				Name:  "upload",
 				Flags: commonFlag,

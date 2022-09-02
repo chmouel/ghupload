@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Upload itself",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}",
+            "env": {
+                "GITHUB_TOKEN": "${input:githubToken}"
+            },
+            "args": [
+                "upload",
+                "vendor/google.golang.org/protobuf/runtime/",
+                "chmouel/environment-collarrose-production:foo/"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "githubToken",
+            "command": "shellCommand.execute",
+            "type": "command",
+            "args": {
+                "useSingleResult": true,
+                "command": "pass show github/chmouel-token"
+            }
+        }
+    ]
+}

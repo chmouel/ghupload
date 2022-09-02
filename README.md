@@ -33,7 +33,7 @@ the token can be specified in the environment variable `GITHUB_TOKEN`. You can s
 
 ### Release
 
-Go to the [release](https://github.com/chmouel/gosmee/releases) page and choose your archive or package for your platform.
+Go to the [release](https://github.com/chmouel/ghupload/releases) page and choose your archive or package for your platform.
 
 ### Homebrew
 

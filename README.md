@@ -31,6 +31,19 @@ the token can be specified in the environment variable `GITHUB_TOKEN`. You can s
 
 ### Installation
 
+### Release
+
+Go to the [release](https://github.com/chmouel/gosmee/releases) page and choose your archive or package for your platform.
+
+### Homebrew
+
+```shell
+brew tap chmouel/ghupload https://github.com/chmouel/ghupload
+brew install ghupload
+```
+
+### GO install
+
 ```shell
 go install github.com/chmouel/ghupload@latest
 ```

@@ -5,6 +5,7 @@ VERSION=${1-""}
 bumpversion() {
    current=$(git describe --tags $(git rev-list --tags --max-count=1))
    echo "Current tag version is ${current}"
+   current=${current/v/}
 
    major=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_major()))" ${current})
    minor=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_minor()))" ${current})
@@ -30,6 +31,7 @@ bumpversion() {
        echo "could not bump version automatically"
        exit
    }
+   VERSION=v${VERSION}
    echo "[release] Releasing ${VERSION}"
 }
 

@@ -35,7 +35,7 @@ brews:
       name: ghupload
     folder: Formula
     homepage: "https://github.com/chmouel/ghupload"
-    description: ghupload  - smee.io go client
+    description: ghupload - upload to a GitHub repo via API"
     install: |
       bin.install "ghupload" => "ghupload"
       output = Utils.popen_read("SHELL=bash #{bin}/ghupload completion bash")
@@ -56,7 +56,7 @@ release:
 nfpms:
   - file_name_template: "ghupload-{{.Version}}_{{.Os}}-{{.Arch}}"
     homepage: https://github.com/chmouel/ghupload
-    description: "ghupload - smee.io forwarder in go"
+    description: "ghupload - upload to a GitHub repo via API"
     maintainer: Chmouel Boudjnah <chmouel@chmouel.com>
     license: Apache 2.0
     formats:
@@ -92,7 +92,7 @@ universal_binaries:
 aurs:
   - name: ghupload-bin
     homepage: "https://github.com/chmouel/ghupload"
-    description: "ghupload - smee.io forwarder in go"
+    description: "ghupload - upload to a GitHub repo via API"
     maintainers:
       - "Chmouel Boudjnah <chmouel@chmouel.com>"
     license: Apache 2.0

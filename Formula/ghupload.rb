@@ -5,11 +5,11 @@
 class Ghupload < Formula
   desc "ghupload  - smee.io go client"
   homepage "https://github.com/chmouel/ghupload"
-  version "0.1.0"
+  version "0.1.1"
 
   on_macos do
-    url "https://github.com/chmouel/ghupload/releases/download/v0.1.0/ghupload_0.1.0_MacOS_all.tar.gz"
-    sha256 "a3d3ea2169d28b6aedc0faad7dbb2bf5c1c795bf7443ff139626a43c732b8c2c"
+    url "https://github.com/chmouel/ghupload/releases/download/v0.1.1/ghupload_0.1.1_MacOS_all.tar.gz"
+    sha256 "993d4137a97ac76f0d8e294b266009fb3e00e9dc3aa70c062a8be916bd9a79fd"
 
     def install
       bin.install "ghupload" => "ghupload"
@@ -22,9 +22,9 @@ class Ghupload < Formula
   end
 
   on_linux do
-    if Hardware::CPU.intel?
-      url "https://github.com/chmouel/ghupload/releases/download/v0.1.0/ghupload_0.1.0_Linux_x86_64.tar.gz"
-      sha256 "83ee03e2d99bf1db3e74506a3ef2fdeb41c1f0451febee0d4bd0ee1fa989e210"
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/chmouel/ghupload/releases/download/v0.1.1/ghupload_0.1.1_Linux_arm64.tar.gz"
+      sha256 "5e83a2333ba596fded92082c129863187562616dee7f1bd08bbff63df038168e"
 
       def install
         bin.install "ghupload" => "ghupload"
@@ -35,9 +35,9 @@ class Ghupload < Formula
         prefix.install_metafiles
       end
     end
-    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/chmouel/ghupload/releases/download/v0.1.0/ghupload_0.1.0_Linux_arm64.tar.gz"
-      sha256 "551747c106f2a7fc7b21019729238907b54c6b6b4e30befbbaa1248f41ef66c1"
+    if Hardware::CPU.intel?
+      url "https://github.com/chmouel/ghupload/releases/download/v0.1.1/ghupload_0.1.1_Linux_x86_64.tar.gz"
+      sha256 "d8f9af213016edb0b87d0ccba4a163b8e86db3b98543e6980eadaafe258541a0"
 
       def install
         bin.install "ghupload" => "ghupload"

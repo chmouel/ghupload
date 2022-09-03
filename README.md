@@ -20,13 +20,13 @@ Then you can use it like this:
 * dirs are uploaded recursively
 * it doesn't handle synchronization, so deletion need to be manual.
 
-The token can be specified in the environment variable `GitHub_TOKEN`. You can
+The token can be specified in the environment variable `GHUPLOAD_TOKEN`. You can
 specify a [pass](https://www.passwordstore.org/) entry to get the token from
 there if you prefix with `pass::` :
 
 ```shell
-    # this will grab the value from GitHub/token `pass` entry
-    export GitHub_TOKEN=pass::GitHub/token
+    # this will grab the value from github/token `pass` entry
+    export GHUPLOAD_TOKEN=pass::github/token
 ```
 
 * You can omit to specify a branch, it will grab the default branch from your
@@ -42,7 +42,7 @@ there if you prefix with `pass::` :
 
 ### Release
 
-Go to the [release](https://GitHub.com/chmouel/ghupload/releases) page and
+Go to the [release](https://github.com/chmouel/ghupload/releases) page and
 choose your archive or package for your platform.
 
 ### HomeBrew

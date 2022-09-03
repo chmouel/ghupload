@@ -30,7 +30,7 @@ func app() error {
 			Name:  "token",
 			Usage: "github token",
 			EnvVars: []string{
-				"GITHUB_TOKEN",
+				"GHUPLOAD_TOKEN",
 			},
 		},
 		&cli.StringFlag{

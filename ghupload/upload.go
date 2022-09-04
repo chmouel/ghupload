@@ -30,7 +30,7 @@ func parsePath(path string) (blob, error) {
 	regexp := regexp.MustCompile(`^(?P<owner>[^/]+)\/(?P<repo>[^@]+)(@(?P<branch>[^:]+))?:(?P<src>.+)$`)
 	match := regexp.FindStringSubmatch(path)
 	if match == nil {
-		return blob{}, fmt.Errorf("invalid path format: %s", path)
+		return blob{}, fmt.Errorf("invalid dst format: %s, should be of owner/repo@branch:dst/", path)
 	}
 	return blob{
 		owner:  match[1],

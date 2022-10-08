@@ -14,13 +14,13 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-//go:embed misc/completions/zsh_completion.zsh
+//go:embed completions/zsh_completion.zsh
 var zshCompletion []byte
 
-//go:embed misc/version
+//go:embed version
 var Version []byte
 
-//go:embed misc/completions/bash_completion.bash
+//go:embed completions/bash_completion.bash
 var bashCompletion []byte
 
 func app() error {

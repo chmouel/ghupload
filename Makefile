@@ -15,7 +15,7 @@ clean:
 build: clean
 	@echo "building."
 	@mkdir -p bin/
-	@go build  -v $(FLAGS)  -o bin/$(BINARY) $(BINARY).go
+	@go build  -v $(FLAGS)  -o bin/$(BINARY) cli/$(BINARY).go
 
 lint: lint-go
 

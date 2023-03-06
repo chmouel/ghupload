@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/google/go-github/v47 v47.1.0
-	github.com/urfave/cli/v2 v2.24.4
+	github.com/urfave/cli/v2 v2.25.0
 	golang.org/x/oauth2 v0.5.0
 )
 

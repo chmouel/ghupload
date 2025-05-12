@@ -1,11 +1,11 @@
 module github.com/chmouel/ghupload
 
-go 1.19
+go 1.23.0
 
 require (
 	github.com/google/go-github/v47 v47.1.0
 	github.com/urfave/cli/v2 v2.27.6
-	golang.org/x/oauth2 v0.29.0
+	golang.org/x/oauth2 v0.30.0
 )
 
 require (
